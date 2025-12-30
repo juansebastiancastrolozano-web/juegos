@@ -45,6 +45,12 @@ def main():
     with st.sidebar:
         st.header("⚙️ Configuración")
         
+        # Mostrar estado de APIs
+        import os
+        itad_key = os.getenv("ITAD_API_KEY")
+        if not itad_key:
+            st.info("💡 **Tip:** Configura ITAD_API_KEY en Railway para obtener más resultados de búsqueda")
+        
         # Opción para refrescar datos
         if st.button("🔄 Refrescar Datos", use_container_width=True):
             st.cache_resource.clear()
