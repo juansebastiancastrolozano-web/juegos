@@ -292,27 +292,47 @@ class APIManager:
         """Busca un juego en todas las plataformas disponibles."""
         all_deals = []
         
-        # Buscar en CheapShark - obtener deals directamente
+        # Buscar en CheapShark usando el endpoint de búsqueda
         try:
-            cheapshark_deals = await self.cheapshark.get_deals()
-            # Filtrar por título (búsqueda aproximada)
-            query_lower = query.lower()
-            for deal in cheapshark_deals:
-                if query_lower in deal.title.lower():
-                    all_deals.append(deal)
+            cheapshark_games = await self.cheapshark.search_game(query)
+            if cheapshark_games:
+                # Para cada juego encontrado, obtener sus deals
+                for game in cheapshark_games[:5]:  # Limitar a 5 juegos para no sobrecargar
+                    game_id = game.get("gameID", "")
+                    if game_id:
+                        # Obtener deals específicos del juego
+                        game_info = await self.cheapshark.get_game_info(game_id)
+                        if game_info:
+                            # Buscar deals que coincidan con este juego
+                            deals = await self.cheapshark.get_deals()
+                            for deal in deals:
+                                if str(deal.deal_id) == str(game_id) or query.lower() in deal.title.lower():
+                                    all_deals.append(deal)
         except Exception as e:
             print(f"Error buscando en CheapShark: {e}")
         
-        # Buscar en ITAD
-        try:
-            itad_games = await self.itad.search_game(query)
-            for game in itad_games:
-                game_id = game.get("id", "")
-                if game_id:
-                    deals = await self.itad.get_current_prices(game_id)
-                    all_deals.extend(deals)
-        except Exception as e:
-            print(f"Error buscando en ITAD: {e}")
+        # Si no encontramos nada en CheapShark, intentar obtener deals generales y filtrar
+        if not all_deals:
+            try:
+                cheapshark_deals = await self.cheapshark.get_deals()
+                query_lower = query.lower()
+                for deal in cheapshark_deals[:50]:  # Limitar a 50 deals para búsqueda
+                    if query_lower in deal.title.lower():
+                        all_deals.append(deal)
+            except Exception as e:
+                print(f"Error en búsqueda alternativa de CheapShark: {e}")
+        
+        # Buscar en ITAD (solo si hay API key)
+        if self.itad.api_key:
+            try:
+                itad_games = await self.itad.search_game(query)
+                for game in itad_games[:5]:  # Limitar a 5 juegos
+                    game_id = game.get("id", "")
+                    if game_id:
+                        deals = await self.itad.get_current_prices(game_id)
+                        all_deals.extend(deals)
+            except Exception as e:
+                print(f"Error buscando en ITAD: {e}")
         
         # Eliminar duplicados basados en título y tienda
         seen = set()

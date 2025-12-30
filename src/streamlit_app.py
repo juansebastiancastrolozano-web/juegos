@@ -357,7 +357,11 @@ def render_search_page():
     if query:
         with st.spinner(f"Buscando '{query}'..."):
             import asyncio
-            deals = asyncio.run(watchlist_manager.api_manager.search_game_global(query))
+            try:
+                deals = asyncio.run(watchlist_manager.api_manager.search_game_global(query))
+            except Exception as e:
+                st.error(f"Error al buscar: {str(e)}")
+                deals = []
         
         if deals:
             st.success(f"Se encontraron {len(deals)} ofertas")
