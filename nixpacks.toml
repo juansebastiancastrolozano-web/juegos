@@ -4,14 +4,13 @@ nixPkgs = ["python3", "python3Packages.pip", "python3Packages.setuptools", "pyth
 [phases.install]
 cmds = [
   "python3 -m venv /app/venv",
-  "source /app/venv/bin/activate",
-  "pip install --upgrade pip setuptools wheel",
-  "pip install -r requirements.txt",
-  "playwright install chromium --with-deps || echo 'Playwright install skipped'"
+  "bash -c 'source /app/venv/bin/activate && pip install --upgrade pip setuptools wheel'",
+  "bash -c 'source /app/venv/bin/activate && pip install -r requirements.txt'",
+  "bash -c 'source /app/venv/bin/activate && playwright install chromium --with-deps || echo Playwright install skipped'"
 ]
 
 [phases.build]
 cmds = []
 
 [start]
-cmd = "source /app/venv/bin/activate && streamlit run src/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0"
+cmd = "bash -c 'source /app/venv/bin/activate && streamlit run src/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0'"
