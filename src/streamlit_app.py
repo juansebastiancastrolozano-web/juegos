@@ -24,8 +24,11 @@ st.set_page_config(
 @st.cache_resource
 def init_components():
     """Inicializa los componentes principales."""
+    import os
     db = Database()
-    api_manager = APIManager()
+    # Obtener API key de ITAD de variables de entorno
+    itad_api_key = os.getenv("ITAD_API_KEY")
+    api_manager = APIManager(itad_api_key)
     watchlist_manager = WatchlistManager(db, api_manager)
     analyzer = DealAnalyzer(db)
     return db, watchlist_manager, analyzer
