@@ -1,15 +1,15 @@
 [phases.setup]
-nixPkgs = ["python3", "python3Packages.pip"]
+nixPkgs = ["python3", "python3Packages.pip", "python3Packages.setuptools"]
 
 [phases.install]
 cmds = [
-  "pip install --user --break-system-packages -r requirements.txt || pip install -r requirements.txt",
-  "playwright install chromium --with-deps || true"
+  "python3 -m pip install --upgrade pip setuptools wheel",
+  "python3 -m pip install -r requirements.txt",
+  "python3 -m playwright install chromium --with-deps || echo 'Playwright install skipped'"
 ]
 
 [phases.build]
 cmds = []
 
 [start]
-cmd = "streamlit run src/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0"
-
+cmd = "python3 -m streamlit run src/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0"
