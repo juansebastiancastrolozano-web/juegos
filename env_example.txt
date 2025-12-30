@@ -1,0 +1,14 @@
+# Configuración de APIs
+# Copia este archivo como .env y completa los valores
+
+# API Key de IsThereAnyDeal (opcional pero recomendado)
+# Obtén tu key en: https://isthereanydeal.com/
+ITAD_API_KEY=tu_api_key_de_isthereanydeal_aqui
+
+# Configuración de Telegram Bot (opcional)
+# Crea un bot con @BotFather en Telegram
+TELEGRAM_BOT_TOKEN=tu_telegram_bot_token_aqui
+
+# Obtén tu Chat ID con @userinfobot en Telegram
+TELEGRAM_CHAT_ID=tu_telegram_chat_id_aqui
+

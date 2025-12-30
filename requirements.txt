@@ -1,0 +1,22 @@
+# Game Deal Hunter - Dependencies
+
+# HTTP Client
+aiohttp>=3.9.0
+
+# Web Scraping
+playwright>=1.40.0
+
+# Rich CLI
+rich>=13.7.0
+
+# Desktop Notifications
+plyer>=2.1.0
+
+# Web Interface
+streamlit>=1.28.0
+plotly>=5.17.0
+pandas>=2.0.0
+
+# Database (SQLite viene con Python, pero podemos usar mejoras)
+# No se requiere dependencia adicional para SQLite básico
+
