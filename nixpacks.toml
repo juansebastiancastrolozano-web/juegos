@@ -1,0 +1,15 @@
+[phases.setup]
+nixPkgs = ["python3", "python3Packages.pip"]
+
+[phases.install]
+cmds = [
+  "pip install -r requirements.txt",
+  "playwright install chromium --with-deps || true"
+]
+
+[phases.build]
+cmds = []
+
+[start]
+cmd = "streamlit run src/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0"
+
