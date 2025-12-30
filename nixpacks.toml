@@ -1,8 +1,11 @@
 [phases.setup]
-nixPkgs = ["python3", "python3Packages.pip"]
+nixPkgs = ["python3", "python3Packages.pip", "python3Packages.virtualenv"]
 
 [phases.install]
 cmds = [
+  "python3 -m venv venv",
+  ". venv/bin/activate",
+  "pip install --upgrade pip",
   "pip install -r requirements.txt",
   "playwright install chromium --with-deps || true"
 ]
@@ -11,5 +14,5 @@ cmds = [
 cmds = []
 
 [start]
-cmd = "streamlit run src/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0"
+cmd = ". venv/bin/activate && streamlit run src/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0"
 

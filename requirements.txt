@@ -9,8 +9,8 @@ playwright>=1.40.0
 # Rich CLI
 rich>=13.7.0
 
-# Desktop Notifications
-plyer>=2.1.0
+# Desktop Notifications (opcional en servidor)
+# plyer>=2.1.0
 
 # Web Interface
 streamlit>=1.28.0
