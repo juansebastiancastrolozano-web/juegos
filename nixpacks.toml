@@ -1,10 +1,12 @@
 [phases.setup]
-nixPkgs = ["python3", "python3Packages.pip", "python3Packages.setuptools", "python3Packages.wheel"]
+nixPkgs = ["python3", "python3Packages.pip", "python3Packages.setuptools", "python3Packages.wheel", "python3Packages.virtualenv"]
 
 [phases.install]
 cmds = [
-  "pip3 install --upgrade pip setuptools wheel",
-  "pip3 install -r requirements.txt",
+  "python3 -m venv /app/venv",
+  "source /app/venv/bin/activate",
+  "pip install --upgrade pip setuptools wheel",
+  "pip install -r requirements.txt",
   "playwright install chromium --with-deps || echo 'Playwright install skipped'"
 ]
 
@@ -12,4 +14,4 @@ cmds = [
 cmds = []
 
 [start]
-cmd = "streamlit run src/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0"
+cmd = "source /app/venv/bin/activate && streamlit run src/streamlit_app.py --server.port=$PORT --server.address=0.0.0.0"
